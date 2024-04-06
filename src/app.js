@@ -1,17 +1,16 @@
 import express from "express";
+import connect from "./config/db.js"
+import manga from "./models/mangas.js"
 
+const c = await connect();
+c.on("error", (e) => {
+    console.error(e)
+});
+c.once("open", () => {
+    console.log("sucess!")
+})
 const app = express();
 app.use(express.json());
-const mangas = [
-    {
-        id: 1,
-        title: "One piece"
-    },
-    {
-        id: 2,
-        title: "Naruto"
-    }
-]
 function findManga(id) {
     return mangas.findIndex(manga => {
         return manga.id === Number(id);
@@ -20,13 +19,14 @@ function findManga(id) {
 app.get("/", (req, res) => {
     res.status(200).send("Home")
 });
-app.get('/mangas', (req, res) => {
-    res.status(200).json(mangas);
+app.get('/mangas', async (req, res) => {
+    const manga = await manga.find({})
+    res.status(200).json(manga);
 });
 app.get('/mangas/:id', (req, res) => {
     try {
         const index = findManga(req.params.id);
-        res.status(200).json(mangas[index]);
+        res.status(200).json(manga[index]);
     } catch (error) {
         console.error(error);
     }
