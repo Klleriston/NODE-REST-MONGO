@@ -1,12 +1,11 @@
-import { author } from "../models/Author.js";
-import manga from "../models/Mangas.js"
+import { author } from "../models/Author.js"
 
-class MangaController {
+class AuthorController {
 
-    static async listMangas(req, res) {
+    static async listAuthor(req, res) {
         try {
-            const listManga = await manga.find({})
-            res.status(200).json(listManga);
+            const listAuthor = await author.find({})
+            res.status(200).json(listAuthor);
         } catch (error) {
             res.status(500).json(
                 {
@@ -16,11 +15,11 @@ class MangaController {
         }
     };
 
-    static async listMangaById(req, res) {
+    static async listAuthorById(req, res) {
         try {
             const id = req.params.id;
-            const mangaFind = await manga.findById(id)
-            res.status(200).json(mangaFind);
+            const authorFind = await author.findById(id)
+            res.status(200).json(authorFind);
         } catch (error) {
             res.status(500).json(
                 {
@@ -30,17 +29,13 @@ class MangaController {
         }
     };
 
-    static async createMangas(req, res) {
-        const nManga = req.body;
-
+    static async createAuthor(req, res) {
         try {
-            const fAuthor = await author.findById(nManga.author);
-            const fullManga = { ...nManga, author: { ...fAuthor._doc} };
-            const createdManga = await manga.create(fullManga);
+            const nAuthor = await author.create(req.body);
             res.status(201).json(
                 {
                     message: "Sucess :p",
-                    manga: nManga
+                    manga: nAuthor
                 }
             );
         } catch (error) {
@@ -53,10 +48,10 @@ class MangaController {
     };
 
 
-    static async updateManga(req, res) {
+    static async updateAuthor(req, res) {
         try {
             const id = req.params.id;
-            await manga.findByIdAndUpdate(id, req.body);
+            await author.findByIdAndUpdate(id, req.body);
             res.status(200).json(
                 {
                     message: "Updated !! :p",
@@ -71,10 +66,10 @@ class MangaController {
         }
     };
 
-    static async deleteManga(req, res) {
+    static async deleteAuthor(req, res) {
         try {
             const id = req.params.id;
-            await manga.findByIdAndDelete(id);
+            await author.findByIdAndDelete(id);
             res.status(200).json(
                 {
                     message: "Deleted !! :p"
@@ -90,4 +85,4 @@ class MangaController {
     }
 };
 
-export default MangaController;
+export default AuthorController;
